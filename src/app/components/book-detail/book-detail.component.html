@@ -1,1 +1,29 @@
-<p>book-detail works!</p>
+<div *ngIf="book$ | async as book" class="book-card">
+  <h2 class="book-title">{{ book.title }}</h2>
+  <div class="book-info">
+    <p class="book-author">{{ book.author }}</p>
+    <hr />
+    <p class="book-description">{{ book.description }}</p>
+    <hr />
+    <p class="book-genre">Жанр: {{ book.genre }}</p>
+    <hr />
+    <p class="book-language">Язык: {{ book.language }}</p>
+    <hr />
+    <p class="book-pages">Страниц: {{ book.pages }}</p>
+  </div>
+  <div class="actions">
+    <button
+      pButton
+      icon="pi pi-pencil"
+      severity="success"
+      [routerLink]="['/create-book']"
+      [queryParams]="{ edit: true, id: book?.id }"
+    ></button>
+    <button
+      pButton
+      icon="pi pi-trash"
+      severity="danger"
+      (click)="onDelete(book?.id)"
+    ></button>
+  </div>
+</div>
