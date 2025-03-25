@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
@@ -15,7 +20,7 @@ import { Author } from '../../models/author.model';
 import { Language } from '../../models/languages';
 import { Genre } from '../../models/genres';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-book-create',
@@ -28,7 +33,7 @@ import { RouterModule } from '@angular/router';
     ButtonModule,
     DropdownModule,
     InputTextareaModule,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './book-create.component.html',
   styleUrl: './book-create.component.scss',
@@ -39,10 +44,14 @@ export class BookCreateComponent implements OnInit {
   private readonly authorService = inject(AuthorService);
   private readonly genreService = inject(GenreService);
   private readonly languageService = inject(LanguageService);
+  private readonly route = inject(ActivatedRoute);
 
   public bookForm: FormGroup;
   public title: string = '';
   public isBookCreated: boolean = false;
+  public isEditMode: boolean = false;
+
+  private bookId?: number;
 
   public authors$?: Observable<Author[]>;
   public languages$?: Observable<Language[]>;
@@ -55,7 +64,7 @@ export class BookCreateComponent implements OnInit {
       language: ['', Validators.required],
       genre: ['', Validators.required],
       pages: ['', [Validators.required, Validators.min(1)]],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
     });
   }
 
@@ -63,12 +72,29 @@ export class BookCreateComponent implements OnInit {
     this.authors$ = this.authorService.getAuthors();
     this.genres$ = this.genreService.getGenres();
     this.languages$ = this.languageService.getLanguages();
+
+    this.route.queryParams.subscribe((params) => {
+      this.isEditMode = params['edit'] === 'true';
+      this.bookId = params['id'] ? +params['id'] : undefined;
+
+      if (this.isEditMode && this.bookId) {
+        this.bookService.getBook(this.bookId).subscribe((book) => {
+          this.bookForm.patchValue(book as Book);
+        });
+      }
+    });
   }
 
-  public onSubmit():void {
-    if (this.bookForm.valid) {
-      const newBook: Book = this.bookForm.value;
-      this.bookService.createBook(newBook).subscribe((data) => {
+  public onSubmit(): void {
+    if (this.isEditMode && this.bookId) {
+      this.bookService
+        .updateBook(this.bookId, this.bookForm.value)
+        .subscribe((data) => {
+          this.title = data.title;
+          this.isBookCreated = true;
+        });
+    } else {
+      this.bookService.createBook(this.bookForm.value).subscribe((data) => {
         this.title = data.title;
         this.isBookCreated = true;
       });

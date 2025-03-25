@@ -1,6 +1,11 @@
 <div class="book-list-container">
   <div class="create-book-btn">
-    <button pButton label="Создать книгу" icon="pi pi-plus" [routerLink]="'/create-book'"></button>
+    <button
+      pButton
+      label="Создать книгу"
+      icon="pi pi-plus"
+      [routerLink]="'/create-book'"
+    ></button>
   </div>
 
   <div class="filters">
@@ -25,7 +30,7 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-book>
-      <tr class="book-item">
+      <tr class="book-item" [routerLink]="['/book', book.id]">
         <td>{{ book.title }}</td>
         <td>{{ book.author }}</td>
         <td>{{ book.pages }}</td>
