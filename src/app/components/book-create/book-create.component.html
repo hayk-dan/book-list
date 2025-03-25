@@ -1,1 +1,62 @@
-<p>book-create works!</p>
+<form *ngIf="!isBookCreated; else sucsess" [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+  <div class="p-fluid formgrid grid justify-content-center">
+    <div *ngIf="genres$ | async as genres" class="p-field col-5 md-4">
+      <label for="genre">Жанр</label>
+      <p-dropdown
+        [options]="genres"
+        formControlName="genre"
+        placeholder="Выберите жанр"
+        optionLabel="name"
+        optionValue="name">
+      </p-dropdown>
+    </div>
+
+    <div *ngIf="languages$ | async as languages" class="p-field col-5 md-4">
+      <label for="language">Язык</label>
+      <p-dropdown
+        [options]="languages"
+        formControlName="language"
+        placeholder="Выберите язык"
+        optionLabel="name"
+        optionValue="name">
+      </p-dropdown>
+    </div>
+
+    <div *ngIf="authors$ | async as authors" class="p-field col-5 md-4">
+      <label for="author">Автор</label>
+      <p-dropdown
+        [options]="authors"
+        formControlName="author"
+        placeholder="Выберите автора"
+        optionLabel="name"
+        optionValue="name">
+      </p-dropdown>
+    </div>
+
+    <div class="p-field col-5 md-4">
+      <label for="title">Название книги</label>
+      <input id="title" formControlName="title" pInputText placeholder="Введите название книги" />
+    </div>
+
+    <div class="p-field col-5 md-4">
+      <label for="pages">Число страниц</label>
+      <input id="pages" formControlName="pages" pInputText type="number" placeholder="Введите число страниц" />
+    </div>
+
+    <div class="p-field col-5 md-4">
+      <label for="description">Описание</label>
+      <textarea id="description" formControlName="description" pInputTextarea rows="1" placeholder="Введите описание книги"></textarea>
+    </div>
+
+    <div class="col-5 flex justify-content-center">
+      <button pButton label="Создать книгу" icon="pi pi-check" type="submit" [disabled]="bookForm.invalid"></button>
+    </div>
+  </div>
+</form>
+
+<ng-template #sucsess>
+  <div class="confirmation-container">
+    <p class="success-message">📖 Книга успешно создана!</p>
+    <button pButton label="К списку" icon="pi pi-arrow-left" [routerLink]="'/'"></button>
+  </div>
+</ng-template>
