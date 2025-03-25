@@ -1,0 +1,101 @@
+<div class="filter-container">
+  <div class="search">
+    <input
+      type="text"
+      [(ngModel)]="searchSignal"
+      (ngModelChange)="onSearchChange($event)"
+      placeholder="Поиск по названию и описанию"
+      pInputText
+    />
+  </div>
+
+  <button
+    pButton
+    label="Фильтры"
+    icon="pi pi-filter"
+    (click)="openFilterDialog()"
+  ></button>
+
+  <p-dialog
+    [(visible)]="displayModal"
+    [modal]="true"
+    [closable]="false"
+    [resizable]="false"
+  >
+    <div class="dialog-head">
+      <h3>Фильтры</h3>
+      <button
+        type="button"
+        class="close-button"
+        (click)="closeFilterDialog()"
+        pButton
+        icon="pi pi-times"
+        style="float: right"
+      ></button>
+    </div>
+
+    <div class="filter-modal">
+      <div class="filter-fields">
+        <div *ngIf="authors$ | async as authors">
+          <p-multiSelect
+            [options]="authors"
+            [(ngModel)]="authorsSignal"
+            [filter]="false"
+            (onChange)="onAuthorsChange($event.value)"
+            optionLabel="name"
+            placeholder="Выберите авторов"
+          ></p-multiSelect>
+        </div>
+
+        <div *ngIf="languages$ | async as languages">
+          <p-multiSelect
+            [options]="languages"
+            [(ngModel)]="languagesSignal"
+            [filter]="false"
+            (onChange)="onLanguagesChange($event.value)"
+            optionLabel="name"
+            placeholder="Выберите языки"
+          ></p-multiSelect>
+        </div>
+
+        <div *ngIf="genres$ | async as genres">
+          <p-dropdown
+            size="small"
+            [options]="genres"
+            [(ngModel)]="genreSignal"
+            (onChange)="onGenreChange($event.value)"
+            optionLabel="name"
+            placeholder="Выберите жанр"
+          ></p-dropdown>
+        </div>
+      </div>
+
+      <div class="page-range">
+        <p-inputNumber
+          type="number"
+          [(ngModel)]="minPagesSignal"
+          (ngModelChange)="onMinPagesChange($event)"
+          placeholder="Мин. страницы"
+        />
+        <p-inputNumber
+          type="number"
+          [(ngModel)]="maxPagesSignal"
+          (ngModelChange)="onMaxPagesChange($event)"
+          placeholder="Макс. страницы"
+        />
+      </div>
+
+      <div class="actions">
+        <button pButton label="Применить" (click)="applyFilters()"></button>
+        <button pButton label="Сбросить" (click)="resetFilters()"></button>
+      </div>
+    </div>
+  </p-dialog>
+
+  <button
+    pButton
+    label="Найти"
+    icon="pi pi-search"
+    (click)="applyFilters()"
+  ></button>
+</div>

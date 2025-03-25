@@ -1,0 +1,33 @@
+/* book-list.component.scss */
+.book-list-container {
+  padding: 20px;
+}
+
+.create-book-btn {
+  margin-bottom: 20px;
+}
+
+.filters {
+  margin-bottom: 20px;
+}
+
+.book-item {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    background-color: #d8d8d8;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  p {
+    margin: 5px 0;
+  }
+}
