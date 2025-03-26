@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Book } from '../models/book.model';
 import { API_URL } from '../app.config';
+import { Filter } from '../shared/filter/filter.component';
 
 @Injectable({
   providedIn: 'root',
@@ -12,26 +13,22 @@ export class BookService {
 
   constructor() {}
 
-  public getBooks(filters: { [key: string]: any }): Observable<any[]> {
+  public getBooks(filters: Filter): Observable<Book[]> {
     let params = new HttpParams();
 
-    Object.keys(filters).forEach((key) => {
-      if (filters[key]) {
-        if (key === 'authors') {
-          filters[key].forEach((author: string) => {
-            params = params.append('author', author);
-          });
-        } else if (key === 'languages') {
-          filters[key].forEach((language: string) => {
-            params = params.append('language', language);
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) {
+        if (Array.isArray(value)) {
+          value.forEach((val) => {
+            params = params.append(key, val);
           });
         } else {
-          params = params.append(key, filters[key]);
+          params = params.append(key, value);
         }
       }
     });
 
-    return this.http.get<any[]>(`${API_URL}/books`, { params });
+    return this.http.get<Book[]>(`${API_URL}/books`, { params });
   }
 
   public getBook(id: number): Observable<Book | null> {
@@ -51,8 +48,6 @@ export class BookService {
   }
 
   public updateBook(id: number, book: Book): Observable<Book> {
-    console.log(book);
-
     return this.http.put<Book>(`${API_URL}/books/${id}`, book);
   }
 }

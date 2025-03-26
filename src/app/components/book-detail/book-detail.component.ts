@@ -1,10 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { BookService } from '../../services/book.service';
 import { Book } from '../../models/book.model';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-book-detail',
@@ -17,6 +18,7 @@ export class BookDetailComponent implements OnInit {
   private readonly bookService = inject(BookService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   public book$?: Observable<Book | null>;
 
@@ -27,7 +29,7 @@ export class BookDetailComponent implements OnInit {
 
   public onDelete(bookId: number | undefined): void {
     if (bookId) {
-      this.bookService.deleteBook(bookId).subscribe(() => {
+      this.bookService.deleteBook(bookId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
         this.router.navigate(['/']);
       });
     }

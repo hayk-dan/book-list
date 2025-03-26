@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Book } from '../../models/book.model';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
-import { FilterComponent } from '../../shared/filter/filter.component';
+import { Filter, FilterComponent } from '../../shared/filter/filter.component';
 
 @Component({
   selector: 'app-book-list',
@@ -30,7 +30,7 @@ export class BookListComponent implements OnInit {
     this.fetchBooks({});
   }
 
-  fetchBooks(filters: any) {
+  fetchBooks(filters: Filter) {
     this.books$ = this.bookService.getBooks(filters);
   }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -21,6 +21,7 @@ import { Language } from '../../models/languages';
 import { Genre } from '../../models/genres';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-book-create',
@@ -45,6 +46,7 @@ export class BookCreateComponent implements OnInit {
   private readonly genreService = inject(GenreService);
   private readonly languageService = inject(LanguageService);
   private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
 
   public bookForm: FormGroup;
   public title: string = '';
@@ -73,31 +75,40 @@ export class BookCreateComponent implements OnInit {
     this.genres$ = this.genreService.getGenres();
     this.languages$ = this.languageService.getLanguages();
 
-    this.route.queryParams.subscribe((params) => {
-      this.isEditMode = params['edit'] === 'true';
-      this.bookId = params['id'] ? +params['id'] : undefined;
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        this.isEditMode = params['edit'] === 'true';
+        this.bookId = params['id'] ? +params['id'] : undefined;
 
-      if (this.isEditMode && this.bookId) {
-        this.bookService.getBook(this.bookId).subscribe((book) => {
-          this.bookForm.patchValue(book as Book);
-        });
-      }
-    });
+        if (this.isEditMode && this.bookId) {
+          this.bookService
+            .getBook(this.bookId)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((book) => {
+              this.bookForm.patchValue(book as Book);
+            });
+        }
+      });
   }
 
   public onSubmit(): void {
     if (this.isEditMode && this.bookId) {
       this.bookService
         .updateBook(this.bookId, this.bookForm.value)
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((data) => {
           this.title = data.title;
           this.isBookCreated = true;
         });
     } else {
-      this.bookService.createBook(this.bookForm.value).subscribe((data) => {
-        this.title = data.title;
-        this.isBookCreated = true;
-      });
+      this.bookService
+        .createBook(this.bookForm.value)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((data) => {
+          this.title = data.title;
+          this.isBookCreated = true;
+        });
     }
   }
 }

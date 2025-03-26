@@ -1,8 +1,6 @@
-import { Component, signal, inject, EventEmitter, Output } from '@angular/core';
+import { Component, signal, inject, EventEmitter, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
-import { Book } from '../../models/book.model';
-import { BookService } from '../../services/book.service';
 import { Author } from '../../models/author.model';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -16,6 +14,15 @@ import { Genre } from '../../models/genres';
 import { GenreService } from '../../services/genre.service';
 import { LanguageService } from '../../services/language.service';
 import { InputNumberModule } from 'primeng/inputnumber';
+
+export interface Filter {
+  title?: string,
+  author?: string[],
+  language?: string[],
+  genre?: string,
+  minPages?: number | null,
+  maxPages?: number | null
+}
 
 @Component({
   selector: 'app-filter',
@@ -33,8 +40,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
 })
-export class FilterComponent {
-  @Output() filtersChanged = new EventEmitter<any>();
+export class FilterComponent implements OnInit {
+  @Output() filtersChanged = new EventEmitter<Filter>();
   
   public searchSignal = signal('');
   public authorsSignal = signal<Author[] | null>(null);
@@ -48,9 +55,6 @@ export class FilterComponent {
   public genres$?: Observable<Genre[]>;
   public displayModal = false;
 
-  filteredBooks$?: Observable<Book[]>;
-
-  private bookService = inject(BookService);
   private authorService = inject(AuthorService);
   private genreService = inject(GenreService);
   private languageService = inject(LanguageService);
@@ -61,15 +65,6 @@ export class FilterComponent {
     this.authors$ = this.authorService.getAuthors();
     this.genres$ = this.genreService.getGenres();
     this.languages$ = this.languageService.getLanguages();
-
-    this.filteredBooks$ = this.bookService.getBooks({
-      search: this.searchSignal(),
-      authors: this.authorsSignal(),
-      languages: this.languagesSignal(),
-      genre: this.genreSignal(),
-      minPages: this.minPagesSignal(),
-      maxPages: this.maxPagesSignal(),
-    });
   }
 
   openFilterDialog() {
@@ -83,8 +78,8 @@ export class FilterComponent {
   applyFilters() {
     this.filtersChanged.emit({
       title: this.searchSignal(),
-      authors: this.authorsSignal()?.map(data => data.name),
-      languages: this.languagesSignal()?.map(data => data.name),
+      author: this.authorsSignal()?.map(data => data.name),
+      language: this.languagesSignal()?.map(data => data.name),
       genre: this.genreSignal()?.name,
       minPages: this.minPagesSignal(),
       maxPages: this.maxPagesSignal(),

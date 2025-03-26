@@ -1,1 +1,36 @@
-<p>author-list works!</p>
+<div *ngIf="authors$ | async as authors" class="container">
+  <h2 class="title">Список авторов</h2>
+  
+  <button pButton label="Добавить автора" icon="pi pi-plus" class="p-button-success mb-3" (click)="openCreateDialog()"></button>
+
+  <p-table [value]="authors" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ФИО</th>
+        <th class="text-center">Действия</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-author>
+      <tr>
+        <td>{{ author.name }}</td>
+        <td class="text-center">
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-warning p-mr-2" (click)="openEditDialog(author)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteAuthor(author.id)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog [(visible)]="isDialogVisible" [modal]="true" [closable]="false" header="Автор">
+    <div class="p-fluid">
+      <label for="authorName">ФИО</label>
+      <input id="authorName" type="text" pInputText [(ngModel)]="authorName" placeholder="Введите ФИО автора" />
+    </div>
+
+    <ng-template pTemplate="footer">
+      <button pButton label="Сохранить" icon="pi pi-check" class="p-button-success" (click)="saveAuthor()"></button>
+      <button pButton label="Отмена" icon="pi pi-times" class="p-button-secondary" (click)="isDialogVisible = false"></button>
+    </ng-template>
+  </p-dialog>
+</div>
