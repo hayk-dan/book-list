@@ -12,34 +12,36 @@
     <app-filter (filtersChanged)="fetchBooks($event)"></app-filter>
   </div>
 
-  <p-table
-    *ngIf="books$ | async as books"
-    [value]="books"
-    [paginator]="true"
-    [rows]="10"
-    [globalFilterFields]="['title', 'author', 'language', 'genre']"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="title">Название</th>
-        <th pSortableColumn="author">Автор</th>
-        <th pSortableColumn="pages">Число страниц</th>
-        <th pSortableColumn="language">Язык</th>
-        <th pSortableColumn="genre">Жанр</th>
-        <th>Действия</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-book>
-      <tr class="book-item" [routerLink]="['/book', book.id]">
-        <td>{{ book.title }}</td>
-        <td>{{ book.author }}</td>
-        <td>{{ book.pages }}</td>
-        <td>{{ book.language }}</td>
-        <td>{{ book.genre }}</td>
-        <td>
-          <button pButton icon="pi pi-info-circle" label="Подробнее"></button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+  <ng-container *ngIf="books$ | async as books">
+    <p-table
+      [value]="books"
+      [paginator]="true"
+      [rows]="10"
+      [globalFilterFields]="['title', 'author', 'language', 'genre']"
+      [rowTrackBy]="trackByBookId"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="title">Название</th>
+          <th pSortableColumn="author">Автор</th>
+          <th pSortableColumn="pages">Число страниц</th>
+          <th pSortableColumn="language">Язык</th>
+          <th pSortableColumn="genre">Жанр</th>
+          <th>Действия</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-book>
+        <tr class="book-item" [routerLink]="['/book', book.id]">
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.pages }}</td>
+          <td>{{ book.language }}</td>
+          <td>{{ book.genre }}</td>
+          <td>
+            <button pButton icon="pi pi-info-circle" label="Подробнее"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-container>
 </div>

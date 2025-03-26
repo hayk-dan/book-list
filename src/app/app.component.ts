@@ -8,8 +8,6 @@ import { HeaderComponent } from './shared/header/header.component';
   standalone: true,
   imports: [CommonModule, RouterOutlet, HeaderComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  title = 'book-list';
-}
+export class AppComponent {}

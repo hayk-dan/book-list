@@ -1,4 +1,11 @@
-import { Component, signal, inject, EventEmitter, Output, OnInit } from '@angular/core';
+import {
+  Component,
+  signal,
+  inject,
+  EventEmitter,
+  Output,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Author } from '../../models/author.model';
@@ -16,12 +23,12 @@ import { LanguageService } from '../../services/language.service';
 import { InputNumberModule } from 'primeng/inputnumber';
 
 export interface Filter {
-  title?: string,
-  author?: string[],
-  language?: string[],
-  genre?: string,
-  minPages?: number | null,
-  maxPages?: number | null
+  title?: string;
+  author?: string[];
+  language?: string[];
+  genre?: string;
+  minPages?: number | null;
+  maxPages?: number | null;
 }
 
 @Component({
@@ -35,14 +42,14 @@ export interface Filter {
     FormsModule,
     DialogModule,
     ButtonModule,
-    InputNumberModule
+    InputNumberModule,
   ],
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
 })
 export class FilterComponent implements OnInit {
   @Output() filtersChanged = new EventEmitter<Filter>();
-  
+
   public searchSignal = signal('');
   public authorsSignal = signal<Author[] | null>(null);
   public languagesSignal = signal<Language[] | null>(null);
@@ -55,31 +62,31 @@ export class FilterComponent implements OnInit {
   public genres$?: Observable<Genre[]>;
   public displayModal = false;
 
-  private authorService = inject(AuthorService);
-  private genreService = inject(GenreService);
-  private languageService = inject(LanguageService);
+  private readonly authorService = inject(AuthorService);
+  private readonly genreService = inject(GenreService);
+  private readonly languageService = inject(LanguageService);
 
   constructor() {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.authors$ = this.authorService.getAuthors();
     this.genres$ = this.genreService.getGenres();
     this.languages$ = this.languageService.getLanguages();
   }
 
-  openFilterDialog() {
+  public openFilterDialog(): void {
     this.displayModal = true;
   }
 
-  closeFilterDialog() {
+  public closeFilterDialog(): void {
     this.displayModal = false;
   }
 
-  applyFilters() {
+  public applyFilters(): void {
     this.filtersChanged.emit({
       title: this.searchSignal(),
-      author: this.authorsSignal()?.map(data => data.name),
-      language: this.languagesSignal()?.map(data => data.name),
+      author: this.authorsSignal()?.map((data) => data.name),
+      language: this.languagesSignal()?.map((data) => data.name),
       genre: this.genreSignal()?.name,
       minPages: this.minPagesSignal(),
       maxPages: this.maxPagesSignal(),
@@ -88,37 +95,47 @@ export class FilterComponent implements OnInit {
     this.closeFilterDialog();
   }
 
-  resetFilters() {
+  public resetFilters(): void {
     this.searchSignal.set('');
     this.authorsSignal.set(null);
     this.languagesSignal.set(null);
     this.genreSignal.set(null);
     this.minPagesSignal.set(null);
     this.maxPagesSignal.set(null);
-    this.applyFilters();
+    
+    this.filtersChanged.emit({
+      title: '',
+      author: [],
+      language: [],
+      genre: '',
+      minPages: null,
+      maxPages: null,
+    });
   }
 
-  onSearchChange(value: string) {
-    this.searchSignal.set(value);
-  }
-
-  onAuthorsChange(value: Author[]) {
-    this.authorsSignal.set(value);
-  }
-
-  onLanguagesChange(value: Language[]) {
-    this.languagesSignal.set(value);
-  }
-
-  onGenreChange(value: Genre) {
-    this.genreSignal.set(value);
-  }
-
-  onMinPagesChange(value: number) {
-    this.minPagesSignal.set(value);
-  }
-
-  onMaxPagesChange(value: number) {
-    this.maxPagesSignal.set(value);
+  public onFilterChange<T>(
+    key: 'search' | 'authors' | 'languages' | 'genre' | 'minPages' | 'maxPages',
+    value: T
+  ): void {
+    switch (key) {
+      case 'search':
+        this.searchSignal.set(value as string);
+        break;
+      case 'authors':
+        this.authorsSignal.set(value as Author[]);
+        break;
+      case 'languages':
+        this.languagesSignal.set(value as Language[]);
+        break;
+      case 'genre':
+        this.genreSignal.set(value as Genre);
+        break;
+      case 'minPages':
+        this.minPagesSignal.set(value as number);
+        break;
+      case 'maxPages':
+        this.maxPagesSignal.set(value as number);
+        break;
+    }
   }
 }

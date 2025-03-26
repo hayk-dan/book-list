@@ -17,13 +17,13 @@
       icon="pi pi-pencil"
       severity="success"
       [routerLink]="['/create-book']"
-      [queryParams]="{ edit: true, id: book?.id }"
+      [queryParams]="{ edit: true, id: book.id }"
     ></button>
     <button
       pButton
       icon="pi pi-trash"
       severity="danger"
-      (click)="onDelete(book?.id)"
+      (click)="onDelete(book.id)"
     ></button>
   </div>
 </div>

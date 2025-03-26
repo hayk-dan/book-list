@@ -50,27 +50,29 @@ export class AuthorListComponent implements OnInit {
   }
 
   public saveAuthor(): void {
-    if (this.authorName.trim()) {
-      if (this.editingAuthor) {
-        this.editingAuthor.name = this.authorName;
-        this.authorService
-          .updateAuthor(this.editingAuthor.id, this.editingAuthor)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe(() => {
-            this.isDialogVisible = false;
-          });
-      } else {
-        const newAuthor = { name: this.authorName };
-        this.authorService
-          .createAuthor(newAuthor)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe(() => {
-            this.isDialogVisible = false;
-            this.authors$ = this.authorService.getAuthors();
-          });
-      }
-      this.isDialogVisible = false;
+    if (!this.authorName.trim()) {
+      return;
     }
+
+    if (this.editingAuthor) {
+      this.editingAuthor.name = this.authorName;
+      this.authorService
+        .updateAuthor(this.editingAuthor.id, this.editingAuthor)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+          this.isDialogVisible = false;
+        });
+    } else {
+      const newAuthor = { name: this.authorName };
+      this.authorService
+        .createAuthor(newAuthor)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+          this.isDialogVisible = false;
+          this.authors$ = this.authorService.getAuthors();
+        });
+    }
+    this.isDialogVisible = false;
   }
 
   public deleteAuthor(authorId: number): void {

@@ -5,15 +5,15 @@ import { API_URL } from '../app.config';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthorService {
   private readonly http = inject(HttpClient);
 
-  constructor() { }
+  constructor() {}
 
   public getAuthors(): Observable<Author[]> {
-    return this.http.get<Author[]>(`${API_URL}/authors`)
+    return this.http.get<Author[]>(`${API_URL}/authors`);
   }
 
   public createAuthor(newAuthor: Omit<Author, 'id'>): Observable<Author> {

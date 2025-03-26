@@ -3,7 +3,7 @@
     <input
       type="text"
       [(ngModel)]="searchSignal"
-      (ngModelChange)="onSearchChange($event)"
+      (ngModelChange)="onFilterChange('search', $event)"
       placeholder="Поиск по названию и описанию"
       pInputText
     />
@@ -41,7 +41,7 @@
             [options]="authors"
             [(ngModel)]="authorsSignal"
             [filter]="false"
-            (onChange)="onAuthorsChange($event.value)"
+            (onChange)="onFilterChange('authors', $event.value)"
             optionLabel="name"
             placeholder="Выберите авторов"
           ></p-multiSelect>
@@ -52,7 +52,7 @@
             [options]="languages"
             [(ngModel)]="languagesSignal"
             [filter]="false"
-            (onChange)="onLanguagesChange($event.value)"
+            (onChange)="onFilterChange('languages', $event.value)"
             optionLabel="name"
             placeholder="Выберите языки"
           ></p-multiSelect>
@@ -63,7 +63,7 @@
             size="small"
             [options]="genres"
             [(ngModel)]="genreSignal"
-            (onChange)="onGenreChange($event.value)"
+            (onChange)="onFilterChange('genre', $event.value)"
             optionLabel="name"
             placeholder="Выберите жанр"
           ></p-dropdown>
@@ -74,13 +74,13 @@
         <p-inputNumber
           type="number"
           [(ngModel)]="minPagesSignal"
-          (ngModelChange)="onMinPagesChange($event)"
+          (ngModelChange)="onFilterChange('minPages', $event)"
           placeholder="Мин. страницы"
         />
         <p-inputNumber
           type="number"
           [(ngModel)]="maxPagesSignal"
-          (ngModelChange)="onMaxPagesChange($event)"
+          (ngModelChange)="onFilterChange('maxPages', $event)"
           placeholder="Макс. страницы"
         />
       </div>
