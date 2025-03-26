@@ -5,14 +5,14 @@ import { Genre } from '../models/genres';
 import { API_URL } from '../app.config';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GenreService {
   private readonly http = inject(HttpClient);
 
-  constructor() { }
+  constructor() {}
 
-  public getGenres(): Observable<Genre[]>{
-    return this.http.get<Genre[]>(`${API_URL}/genres`)
+  public getGenres(): Observable<Genre[]> {
+    return this.http.get<Genre[]>(`${API_URL}/genres`);
   }
 }

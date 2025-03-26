@@ -62,10 +62,10 @@ export class BookCreateComponent implements OnInit {
   constructor() {
     this.bookForm = this.fb.group({
       title: ['', Validators.required],
-      author: ['', Validators.required],
-      language: ['', Validators.required],
-      genre: ['', Validators.required],
-      pages: ['', [Validators.required, Validators.min(1)]],
+      author: [null, Validators.required],
+      language: [null, Validators.required],
+      genre: [null, Validators.required],
+      pages: [null, [Validators.required, Validators.min(1)]],
       description: ['', Validators.required],
     });
   }
@@ -93,22 +93,15 @@ export class BookCreateComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    if (this.isEditMode && this.bookId) {
-      this.bookService
-        .updateBook(this.bookId, this.bookForm.value)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((data) => {
-          this.title = data.title;
-          this.isBookCreated = true;
-        });
-    } else {
-      this.bookService
-        .createBook(this.bookForm.value)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((data) => {
-          this.title = data.title;
-          this.isBookCreated = true;
-        });
-    }
+    const bookAction$ = this.isEditMode && this.bookId
+      ? this.bookService.updateBook(this.bookId, this.bookForm.value)
+      : this.bookService.createBook(this.bookForm.value);
+  
+    bookAction$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        this.title = data.title;
+        this.isBookCreated = true;
+      });
   }
 }

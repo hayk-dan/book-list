@@ -5,14 +5,14 @@ import { Language } from '../models/languages';
 import { API_URL } from '../app.config';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LanguageService {
   private readonly http = inject(HttpClient);
 
-  constructor() { }
+  constructor() {}
 
   public getLanguages(): Observable<Language[]> {
-    return this.http.get<Language[]>(`${API_URL}/languages`)
+    return this.http.get<Language[]>(`${API_URL}/languages`);
   }
 }

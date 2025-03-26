@@ -12,7 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: true,
   imports: [CommonModule, RouterModule, ButtonModule],
   templateUrl: './book-detail.component.html',
-  styleUrl: './book-detail.component.scss',
+  styleUrls: ['./book-detail.component.scss'],
 })
 export class BookDetailComponent implements OnInit {
   private readonly bookService = inject(BookService);
@@ -29,9 +29,12 @@ export class BookDetailComponent implements OnInit {
 
   public onDelete(bookId: number | undefined): void {
     if (bookId) {
-      this.bookService.deleteBook(bookId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-        this.router.navigate(['/']);
-      });
+      this.bookService
+        .deleteBook(bookId)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+          this.router.navigate(['/']);
+        });
     }
   }
 }

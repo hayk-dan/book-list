@@ -25,12 +25,13 @@ export class BookListComponent implements OnInit {
   private readonly bookService = inject(BookService);
   
   public books$?: Observable<Book[]>;
+  public trackByBookId = (_: number, book: Book) => book.id;
 
   ngOnInit() {
     this.fetchBooks({});
   }
 
-  fetchBooks(filters: Filter) {
+  public fetchBooks(filters: Filter): void {
     this.books$ = this.bookService.getBooks(filters);
   }
 }
