@@ -9,8 +9,6 @@ import { ToolbarModule } from 'primeng/toolbar';
   standalone: true,
   imports: [CommonModule, ToolbarModule, ButtonModule, RouterModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
 })
-export class HeaderComponent {
-
-}
+export class HeaderComponent {}

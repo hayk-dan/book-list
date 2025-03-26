@@ -93,15 +93,14 @@ export class BookCreateComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    const bookAction$ = this.isEditMode && this.bookId
-      ? this.bookService.updateBook(this.bookId, this.bookForm.value)
-      : this.bookService.createBook(this.bookForm.value);
-  
-    bookAction$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((data) => {
-        this.title = data.title;
-        this.isBookCreated = true;
-      });
+    const bookAction$ =
+      this.isEditMode && this.bookId
+        ? this.bookService.updateBook(this.bookId, this.bookForm.value)
+        : this.bookService.createBook(this.bookForm.value);
+
+    bookAction$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
+      this.title = data.title;
+      this.isBookCreated = true;
+    });
   }
 }

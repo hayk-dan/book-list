@@ -16,8 +16,24 @@ describe('BookListComponent', () => {
   let bookServiceMock: jasmine.SpyObj<BookService>;
 
   const mockBooks: Book[] = [
-    { id: 1, title: 'Book 1', author: 'Author 1', language: 'English', pages: 100, genre: 'Fiction', description: 'Description 1' },
-    { id: 2, title: 'Book 2', author: 'Author 2', language: 'English', pages: 150, genre: 'Non-Fiction', description: 'Description 2' },
+    {
+      id: 1,
+      title: 'Book 1',
+      author: 'Author 1',
+      language: 'English',
+      pages: 100,
+      genre: 'Fiction',
+      description: 'Description 1',
+    },
+    {
+      id: 2,
+      title: 'Book 2',
+      author: 'Author 2',
+      language: 'English',
+      pages: 150,
+      genre: 'Non-Fiction',
+      description: 'Description 2',
+    },
   ];
 
   beforeEach(async () => {
@@ -26,17 +42,17 @@ describe('BookListComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [
-        CommonModule, 
-        RouterModule, 
-        ButtonModule, 
-        TableModule, 
-        FilterComponent, 
+        CommonModule,
+        RouterModule,
+        ButtonModule,
+        TableModule,
+        FilterComponent,
         BookListComponent,
-        HttpClientModule
+        HttpClientModule,
       ],
       providers: [
         { provide: BookService, useValue: bookServiceMock },
-        { provide: ActivatedRoute, useValue: {} }
+        { provide: ActivatedRoute, useValue: {} },
       ],
     }).compileComponents();
 

@@ -102,7 +102,7 @@ export class FilterComponent implements OnInit {
     this.genreSignal.set(null);
     this.minPagesSignal.set(null);
     this.maxPagesSignal.set(null);
-    
+
     this.filtersChanged.emit({
       title: '',
       author: [],

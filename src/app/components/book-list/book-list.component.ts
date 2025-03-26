@@ -12,18 +12,18 @@ import { Filter, FilterComponent } from '../../shared/filter/filter.component';
   selector: 'app-book-list',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     RouterModule,
     ButtonModule,
     TableModule,
-    FilterComponent
+    FilterComponent,
   ],
   templateUrl: './book-list.component.html',
-  styleUrls:[ './book-list.component.scss']
+  styleUrls: ['./book-list.component.scss'],
 })
 export class BookListComponent implements OnInit {
   private readonly bookService = inject(BookService);
-  
+
   public books$?: Observable<Book[]>;
   public trackByBookId = (_: number, book: Book) => book.id;
 
