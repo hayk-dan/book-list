@@ -11,10 +11,14 @@ describe('BookDetailComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BookDetailComponent, HttpClientModule],
-      providers: [{ provide: ActivatedRoute, useValue: {snapshot: {paramMap: {get:() => {}}} }}],
-    })
-    .compileComponents();
-    
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { paramMap: { get: () => {} } } },
+        },
+      ],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(BookDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

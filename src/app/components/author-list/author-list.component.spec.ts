@@ -9,10 +9,9 @@ describe('AuthorListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AuthorListComponent, HttpClientModule]
-    })
-    .compileComponents();
-    
+      imports: [AuthorListComponent, HttpClientModule],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(AuthorListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

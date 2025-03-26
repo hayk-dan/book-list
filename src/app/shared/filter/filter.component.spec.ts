@@ -11,10 +11,9 @@ describe('FilterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FilterComponent, HttpClientModule],
-      providers: [AuthorService]
-    })
-    .compileComponents();
-    
+      providers: [AuthorService],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(FilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
